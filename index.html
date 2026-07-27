@@ -13,8 +13,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+}
 
-<style>
+}
+  <style>
 
 *{
 margin:0;
@@ -261,12 +263,12 @@ studentName.style.fontSize = size + "px";
 
 }
 
-input.addEventListener("input",fitName);
+input.addEventListener("input", fitName);
 
-window.addEventListener("load",fitName);}
-  downloadBtn.addEventListener("click", async () => {
+window.addEventListener("load", fitName);
 
-    const controls = document.querySelector(".controls");
+downloadBtn.addEventListener("click", async () => {
+  const controls = document.querySelector(".controls");
     controls.style.display = "none";
 
     await document.fonts.ready;
