@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -18,96 +17,120 @@ box-sizing:border-box;
 }
 
 body{
-background:#eef3fb;
+background:#eef2f7;
 font-family:Arial,sans-serif;
-text-align:center;
+display:flex;
+flex-direction:column;
+align-items:center;
 padding:20px;
 }
 
 h2{
+margin-bottom:15px;
 color:#082B73;
-margin-bottom:20px;
-font-size:32px;
-font-weight:bold;
 }
 
 input{
-width:340px;
+width:320px;
 max-width:90%;
 padding:12px;
 font-size:18px;
-border:2px solid #082B73;
 border-radius:8px;
+border:1px solid #bbb;
 outline:none;
+margin-bottom:10px;
 }
 
 button{
-margin-top:12px;
-padding:12px 25px;
-font-size:18px;
-background:#082B73;
-color:white;
+padding:12px 22px;
+font-size:17px;
 border:none;
 border-radius:8px;
+background:#082B73;
+color:#fff;
 cursor:pointer;
+margin:6px;
 }
 
 button:hover{
-background:#0B3E99;
+background:#0d3f9a;
 }
 
 #poster{
 position:relative;
-display:inline-block;
-margin-top:25px;
+width:min(90vw,800px);
 }
 
 #poster img{
-width:800px;
-max-width:100%;
+width:100%;
 display:block;
 }
 
 #name{
 position:absolute;
 left:50%;
-top:76.65%;
+top:76.7%;
 transform:translate(-50%,-50%);
-width:46%;
-height:70px;
+width:64%;
+height:7%;
 display:flex;
 align-items:center;
 justify-content:center;
 font-family:"Times New Roman",serif;
 font-weight:bold;
-font-size:28px;
+font-size:clamp(16px,3vw,30px);
 color:#082B73;
 text-align:center;
-line-height:70px;
 white-space:nowrap;
 overflow:hidden;
 }
-line-height:1;
+  #name::selection{
+background:transparent;
+}
+
+@media (max-width:600px){
+
+input{
+width:92%;
+font-size:16px;
+}
+
+button{
+width:92%;
+}
+
+#poster{
+width:98vw;
+}
+
+#name{
+width:66%;
+top:76.7%;
+font-size:clamp(14px,3.6vw,26px);
+}
 
 }
 
 </style>
 
 </head>
+
 <body>
 
 <h2>Convocation Poster Generator</h2>
 
 <input
-id="inputName"
 type="text"
-placeholder="Enter Your Name"
-maxlength="60"
-oninput="showName()">
+id="inputName"
+placeholder="Enter Name">
 
-<br><br>
+<br>
 
-<button onclick="downloadImage()">
+<button onclick="showName()">
+Show Name
+</button>
+
+<button onclick="downloadPoster()">
 Download Image
 </button>
 
@@ -115,58 +138,68 @@ Download Image
 
 <div id="poster">
 
-<img src="poster.png" alt="Convocation Poster">
+<img src="poster.png" alt="Poster">
 
 <div id="name"></div>
-
 </div>
+
 <script>
 
-function showName(){
+const input=document.getElementById("inputName");
+const nameBox=document.getElementById("name");
 
-const input = document.getElementById("inputName");
-const name = document.getElementById("name");
+function fitText(){
 
-name.textContent = input.value.trim();
+let size=30;
 
-let size = 26;
+nameBox.style.fontSize=size+"px";
 
-if(input.value.length > 16) size = 24;
-if(input.value.length > 24) size = 22;
-if(input.value.length > 32) size = 20;
-if(input.value.length > 40) size = 18;
-if(input.value.length > 50) size = 16;
-
-name.style.fontSize = size + "px";
+while(nameBox.scrollWidth>nameBox.clientWidth && size>14){
+size--;
+nameBox.style.fontSize=size+"px";
+}
 
 }
 
-function downloadImage(){
+function showName(){
 
-const input = document.getElementById("inputName");
-const button = document.querySelector("button");
+nameBox.textContent=input.value.trim();
 
-input.style.display = "none";
-button.style.display = "none";
+fitText();
+
+}
+
+function downloadPoster(){
+
+const btns=document.querySelectorAll("button");
+const inp=document.getElementById("inputName");
+
+btns.forEach(b=>b.style.display="none");
+inp.style.display="none";
 
 html2canvas(document.getElementById("poster"),{
 scale:3,
 useCORS:true
-}).then(function(canvas){
+}).then(canvas=>{
 
-const link = document.createElement("a");
+const link=document.createElement("a");
 
-link.download = "convocation.png";
-link.href = canvas.toDataURL("image/png");
+link.download="convocation.png";
+
+link.href=canvas.toDataURL("image/png");
+
 link.click();
 
-input.style.display = "";
-button.style.display = "";
+btns.forEach(b=>b.style.display="inline-block");
+inp.style.display="inline-block";
 
 });
 
 }
 
+window.addEventListener("resize",fitText);
+
 </script>
+
 </body>
 </html>
