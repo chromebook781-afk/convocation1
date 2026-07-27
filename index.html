@@ -3,20 +3,18 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Convocation Invitation Generator</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-}
 
-}
-  <style>
+<style>
 
 *{
 margin:0;
@@ -25,157 +23,100 @@ box-sizing:border-box;
 }
 
 body{
-
-background:#EEF3FF;
-
+background:#eef3ff;
 font-family:Arial,sans-serif;
-
 display:flex;
-
 flex-direction:column;
-
 align-items:center;
-
 padding:20px;
-
 }
 
 h1{
-
 font-size:30px;
-
 color:#082B73;
-
 margin-bottom:20px;
-
 text-align:center;
-
 }
 
 .controls{
-
 width:100%;
-
 max-width:540px;
-
 display:flex;
-
 gap:12px;
-
 flex-wrap:wrap;
-
 justify-content:center;
-
 margin-bottom:20px;
-
 }
 
 #nameInput{
-
 flex:1;
-
 min-width:260px;
-
 padding:14px;
-
 font-size:18px;
-
 border:2px solid #082B73;
-
 border-radius:10px;
-
 outline:none;
-
 }
 
 #downloadBtn{
-
 padding:14px 22px;
-
-background:#082B73;
-
-color:#fff;
-
-border:none;
-
-border-radius:10px;
-
 font-size:17px;
-
+background:#082B73;
+color:#fff;
+border:none;
+border-radius:10px;
 cursor:pointer;
-
 transition:.25s;
-
 }
 
 #downloadBtn:hover{
-
-background:#0B47BE;
-
+background:#0b47be;
 }
 
 #posterArea{
-
 position:relative;
-
 width:min(900px,95vw);
-
 }
 
 #poster{
-
 display:block;
-
 width:100%;
-
 height:auto;
-
 }
 
 #studentName{
-
 position:absolute;
-
 left:50%;
-
-top:76.45%;
-
+top:76.9%;
 transform:translate(-50%,-50%);
 
-width:46%;
-
-height:58px;
+width:47%;
+height:60px;
 
 display:flex;
-
 justify-content:center;
-
 align-items:center;
 
-font-family:"Cinzel",serif;
-
+font-family:'Cinzel',serif;
 font-size:34px;
-
 font-weight:600;
 
 color:#082B73;
 
-letter-spacing:.4px;
-
 text-align:center;
 
-white-space:nowrap;
+white-space: normal;
+word-break: break-word;
+  overflow:hidden;
 
-overflow:hidden;
-
-padding:0 8px;
+padding:0 10px;
 
 line-height:1;
 
+letter-spacing:.4px;
+
 text-rendering:optimizeLegibility;
-
 -webkit-font-smoothing:antialiased;
-
 }
 
 @media(max-width:700px){
@@ -193,15 +134,13 @@ width:100%;
 }
 
 #studentName{
-
 font-size:28px;
-
-height:46px;
-
-width:47%;
+height:52px;
+width:48%;
+}
 
 }
-</style>
+  </style>
 
 </head>
 
@@ -215,7 +154,7 @@ width:47%;
 type="text"
 id="nameInput"
 placeholder="Enter Student Name"
-maxlength="60"
+maxlength="80"
 autocomplete="off"
 spellcheck="false">
 
@@ -245,17 +184,19 @@ const posterArea = document.getElementById("posterArea");
 
 function fitName(){
 
-const value = input.value.trim();
+const text = input.value.trim().toUpperCase();
 
-studentName.textContent = value;
+studentName.textContent = text;
 
 let size = 34;
+const min = 16;
+
 studentName.style.fontSize = size + "px";
 
 while(
 (studentName.scrollWidth > studentName.clientWidth ||
 studentName.scrollHeight > studentName.clientHeight)
-&& size > 18
+&& size > min
 ){
 size--;
 studentName.style.fontSize = size + "px";
@@ -266,26 +207,31 @@ studentName.style.fontSize = size + "px";
 input.addEventListener("input", fitName);
 
 window.addEventListener("load", fitName);
-
 downloadBtn.addEventListener("click", async () => {
-  const controls = document.querySelector(".controls");
+
+    const controls = document.querySelector(".controls");
     controls.style.display = "none";
 
+    fitName();
     await document.fonts.ready;
 
-    const canvas = await html2canvas(posterArea,{
-        scale:4,
-        useCORS:true,
-        backgroundColor:null
+    const canvas = await html2canvas(posterArea, {
+        scale: 4,
+        useCORS: true,
+        backgroundColor: null
     });
 
     controls.style.display = "flex";
 
     const link = document.createElement("a");
 
-    const fileName = (input.value.trim() || "Convocation")
-        .replace(/[^\w\s-]/g,"")
-        .replace(/\s+/g,"_");
+    let fileName = input.value.trim();
+
+    if (fileName === "") {
+        fileName = "Convocation";
+    }
+
+    fileName = fileName.replace(/[\\/:*?"<>|]/g, "").replace(/\s+/g, "_");
 
     link.download = fileName + "_Invitation.png";
     link.href = canvas.toDataURL("image/png");
