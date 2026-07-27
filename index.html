@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,42 +8,49 @@
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-<style>body{
+<style>
+
+body{
 margin:0;
 padding:20px;
-font-family:Arial,sans-serif;
 background:#f5f5f5;
+font-family:Arial,sans-serif;
 text-align:center;
 }
 
 h2{
-color:#1565C0;
+color:#082B73;
+margin-bottom:20px;
 }
 
 input{
-width:300px;
+width:320px;
 max-width:90%;
 padding:12px;
 font-size:18px;
-border:1px solid #ccc;
+border:2px solid #082B73;
 border-radius:8px;
-margin:10px;
+outline:none;
 }
 
 button{
-padding:12px 20px;
+padding:12px 24px;
+margin:12px;
 font-size:18px;
-background:#1565C0;
+background:#082B73;
 color:white;
 border:none;
 border-radius:8px;
 cursor:pointer;
-margin:10px;
 }
+
+button:hover{
+background:#0B3A8A;
+}
+
 #poster{
 position:relative;
 display:inline-block;
-margin-top:20px;
 }
 
 #poster img{
@@ -50,22 +58,22 @@ width:800px;
 max-width:100%;
 display:block;
 }
+
 #name{
 position:absolute;
 left:50%;
-top:75.8%;
+top:79%;
 transform:translate(-50%,-50%);
-width:52%;
+width:55%;
 text-align:center;
-font-size:26px;
-font-weight:600;
-font-family:"Times New Roman", serif;
-color:#3d2b16;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
+font-size:28px;
+font-weight:bold;
+font-family:"Times New Roman",serif;
+color:#082B73;
 }
+
 </style>
+
 </head>
 <body>
 
@@ -76,25 +84,14 @@ id="inputName"
 type="text"
 placeholder="Enter Your Name"
 oninput="showName()">
-#name{
-position:absolute;
-left:50%;
-top:75.8%;
-transform:translate(-50%,-50%);
-width:52%;
-text-align:center;
-font-size:26px;
-font-weight:600;
-font-family:"Times New Roman", serif;
-color:#3d2b16;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}<br>
+
+<br>
 
 <button onclick="downloadImage()">
 Download Image
 </button>
+
+<br><br>
 
 <div id="poster">
 
@@ -112,11 +109,11 @@ let box=document.getElementById("name");
 
 box.innerHTML=txt;
 
-let size=42;
+let size=28;
 
-if(txt.length>20) size=34;
-if(txt.length>30) size=28;
-if(txt.length>40) size=22;
+if(txt.length>20) size=24;
+if(txt.length>30) size=20;
+if(txt.length>40) size=18;
 
 box.style.fontSize=size+"px";
 
@@ -134,11 +131,10 @@ html2canvas(document.getElementById("poster"),{
 scale:3
 }).then(function(canvas){
 
-let a=document.createElement("a");
-
-a.download="convocation.png";
-a.href=canvas.toDataURL();
-a.click();
+let link=document.createElement("a");
+link.download="convocation.png";
+link.href=canvas.toDataURL("image/png");
+link.click();
 
 input.style.display="inline-block";
 button.style.display="inline-block";
