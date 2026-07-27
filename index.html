@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<title>Convocation Invitation Generator</title>
 
-<title>
-Convocation Invitation Generator
-</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
@@ -20,14 +20,13 @@ Convocation Invitation Generator
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
 
-background:#edf2ff;
+background:#EEF3FF;
 
-padding:20px;
+font-family:Arial,sans-serif;
 
 display:flex;
 
@@ -35,15 +34,17 @@ flex-direction:column;
 
 align-items:center;
 
+padding:20px;
+
 }
 
 h1{
 
+font-size:30px;
+
 color:#082B73;
 
 margin-bottom:20px;
-
-font-size:32px;
 
 text-align:center;
 
@@ -53,17 +54,17 @@ text-align:center;
 
 width:100%;
 
-max-width:520px;
+max-width:540px;
 
 display:flex;
 
-flex-wrap:wrap;
-
 gap:12px;
+
+flex-wrap:wrap;
 
 justify-content:center;
 
-margin-bottom:25px;
+margin-bottom:20px;
 
 }
 
@@ -85,19 +86,19 @@ outline:none;
 
 }
 
-button{
+#downloadBtn{
 
 padding:14px 22px;
 
 background:#082B73;
 
-color:white;
-
-font-size:17px;
+color:#fff;
 
 border:none;
 
 border-radius:10px;
+
+font-size:17px;
 
 cursor:pointer;
 
@@ -105,9 +106,9 @@ transition:.25s;
 
 }
 
-button:hover{
+#downloadBtn:hover{
 
-background:#0A3EA8;
+background:#0B47BE;
 
 }
 
@@ -121,9 +122,11 @@ width:min(900px,95vw);
 
 #poster{
 
+display:block;
+
 width:100%;
 
-display:block;
+height:auto;
 
 }
 
@@ -133,11 +136,13 @@ position:absolute;
 
 left:50%;
 
-top:76.5%;
+top:76.45%;
 
 transform:translate(-50%,-50%);
 
-width:48%;
+width:46%;
+
+height:58px;
 
 display:flex;
 
@@ -145,48 +150,56 @@ justify-content:center;
 
 align-items:center;
 
+font-family:"Cinzel",serif;
+
+font-size:34px;
+
+font-weight:600;
+
+color:#082B73;
+
+letter-spacing:.4px;
+
 text-align:center;
 
 white-space:nowrap;
 
 overflow:hidden;
 
-font-size:42px;
-
-font-weight:700;
-
-color:#082B73;
+padding:0 8px;
 
 line-height:1;
 
-letter-spacing:.3px;
+text-rendering:optimizeLegibility;
+
+-webkit-font-smoothing:antialiased;
 
 }
 
 @media(max-width:700px){
 
-#studentName{
-
-font-size:30px;
-
-width:50%;
-
-}
-
-button{
-
-width:100%;
-
+h1{
+font-size:24px;
 }
 
 #nameInput{
-
 min-width:100%;
-
 }
 
+#downloadBtn{
+width:100%;
 }
-  </style>
+
+#studentName{
+
+font-size:28px;
+
+height:46px;
+
+width:47%;
+
+}
+</style>
 
 </head>
 
@@ -201,7 +214,8 @@ type="text"
 id="nameInput"
 placeholder="Enter Student Name"
 maxlength="60"
-autocomplete="off">
+autocomplete="off"
+spellcheck="false">
 
 <button id="downloadBtn">
 Download Invitation
@@ -219,63 +233,59 @@ alt="Convocation Poster">
 <div id="studentName"></div>
 
 </div>
+
 <script>
 
 const input = document.getElementById("nameInput");
-const nameText = document.getElementById("studentName");
-const posterArea = document.getElementById("posterArea");
+const studentName = document.getElementById("studentName");
 const downloadBtn = document.getElementById("downloadBtn");
+const posterArea = document.getElementById("posterArea");
 
-function updateName() {
+function fitName(){
 
-    let text = input.value.trim();
+const value = input.value.trim();
 
-    if (text === "") {
-        nameText.textContent = "";
-        return;
-    }
+studentName.textContent = value;
 
-    nameText.textContent = text;
+let size = 34;
+studentName.style.fontSize = size + "px";
 
-    let fontSize = 42;
-    nameText.style.fontSize = fontSize + "px";
-
-    while (
-        nameText.scrollWidth > nameText.clientWidth &&
-        fontSize > 18
-    ) {
-        fontSize--;
-        nameText.style.fontSize = fontSize + "px";
-    }
+while(
+(studentName.scrollWidth > studentName.clientWidth ||
+studentName.scrollHeight > studentName.clientHeight)
+&& size > 18
+){
+size--;
+studentName.style.fontSize = size + "px";
 }
 
-input.addEventListener("input", updateName);
+}
 
-window.addEventListener("load", updateName);
+input.addEventListener("input",fitName);
 
-downloadBtn.addEventListener("click", async () => {
+window.addEventListener("load",fitName);}
+  downloadBtn.addEventListener("click", async () => {
 
     const controls = document.querySelector(".controls");
-
     controls.style.display = "none";
 
     await document.fonts.ready;
 
-    const canvas = await html2canvas(posterArea, {
-        scale: 4,
-        useCORS: true,
-        backgroundColor: null
+    const canvas = await html2canvas(posterArea,{
+        scale:4,
+        useCORS:true,
+        backgroundColor:null
     });
 
     controls.style.display = "flex";
 
     const link = document.createElement("a");
 
-    const filename =
-        (input.value.trim() || "Convocation")
-        .replace(/\s+/g, "_");
+    const fileName = (input.value.trim() || "Convocation")
+        .replace(/[^\w\s-]/g,"")
+        .replace(/\s+/g,"_");
 
-    link.download = filename + "_Invitation.png";
+    link.download = fileName + "_Invitation.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
 
